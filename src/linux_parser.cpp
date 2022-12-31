@@ -133,18 +133,17 @@ long LinuxParser::Jiffies() {
   //----------------------------------------------------------
   
   // This works much better
-  CPUStates s;
   vector<string> util = CpuUtilization();
-  long jiffies = std::stol(util[s=kUser_])
-              + std::stol(util[s=kNice_])
-              + std::stol(util[s=kSystem_])
-              + std::stol(util[s=kIdle_])
-              + std::stol(util[s=kIOwait_])
-              + std::stol(util[s=kIRQ_])
-              + std::stol(util[s=kSoftIRQ_])
-              + std::stol(util[s=kSteal_])
-              + std::stol(util[s=kGuest_])
-              + std::stol(util[s=kGuestNice_]);
+  long jiffies = std::stol(util[CPUStates::kUser_])
+              + std::stol(util[CPUStates::kNice_])
+              + std::stol(util[CPUStates::kSystem_])
+              + std::stol(util[CPUStates::kIdle_])
+              + std::stol(util[CPUStates::kIOwait_])
+              + std::stol(util[CPUStates::kIRQ_])
+              + std::stol(util[CPUStates::kSoftIRQ_])
+              + std::stol(util[CPUStates::kSteal_])
+              + std::stol(util[CPUStates::kGuest_])
+              + std::stol(util[CPUStates::kGuestNice_]);
   return jiffies;
 
 }
@@ -180,16 +179,15 @@ long LinuxParser::ActiveJiffies(int pid) {
 long LinuxParser::ActiveJiffies() {
   // From this post:  https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux 
   // Active = user + nice + system + irq + softirq + steal + (guest + guestNice) (I added the values in paren)
-  CPUStates s;
   vector<string> util = CpuUtilization();
-  long active = std::stol(util[s=kUser_])
-              + std::stol(util[s=kNice_])
-              + std::stol(util[s=kSystem_])
-              + std::stol(util[s=kIRQ_])
-              + std::stol(util[s=kSoftIRQ_])
-              + std::stol(util[s=kSteal_])
-              + std::stol(util[s=kGuest_])
-              + std::stol(util[s=kGuestNice_]);
+  long active = std::stol(util[CPUStates::kUser_])
+              + std::stol(util[CPUStates::kNice_])
+              + std::stol(util[CPUStates::kSystem_])
+              + std::stol(util[CPUStates::kIRQ_])
+              + std::stol(util[CPUStates::kSoftIRQ_])
+              + std::stol(util[CPUStates::kSteal_])
+              + std::stol(util[CPUStates::kGuest_])
+              + std::stol(util[CPUStates::kGuestNice_]);
   return active;
 }
 
@@ -197,10 +195,9 @@ long LinuxParser::ActiveJiffies() {
 long LinuxParser::IdleJiffies() {
   // From this post:  https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
   // idle = idle + IOwait
-  CPUStates s;
   vector<string> util = CpuUtilization();
-  long idle = (std::stol(util[s=kIdle_])
-             + std::stol(util[s=kIOwait_]));
+  long idle = (std::stol(util[CPUStates::kIdle_])
+             + std::stol(util[CPUStates::kIOwait_]));
   return idle;
 }
 
@@ -357,7 +354,6 @@ long LinuxParser::UpTime(int pid) {
   // Be careful, this passes ticks the user needs to convert to seconds
   string line;
   string start_time;
-  long active = 0;
   std::ifstream filestream(kProcDirectory + std::to_string(pid) + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
