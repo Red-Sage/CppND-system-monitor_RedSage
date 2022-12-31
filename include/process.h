@@ -22,7 +22,7 @@ class Process {
                      user_{LinuxParser::User(pid)},
                      clock_tick_{sysconf(_SC_CLK_TCK)},
                      cmd_{LinuxParser::Command(pid)},
-                     previous_total_{LinuxParser::ActiveJiffies(pid_)},
+                     previous_total_{LinuxParser::ActiveJiffies(pid)},
                      previous_active_{LinuxParser::Jiffies()}
                      {}
 
@@ -30,14 +30,15 @@ class Process {
  private:
   int pid_;
   std::string user_;
+  long clock_tick_;
+  std::string cmd_;
   long previous_total_;
   long previous_active_;
   float utilization_ = 0;
   float CalcCpuUtil();
   std::string vm_size_;
-  long clock_tick_;
   long up_time_=0;
-  std::string cmd_;
+  
   
 };
 

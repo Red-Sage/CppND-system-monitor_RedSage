@@ -12,6 +12,7 @@ using std::to_string;
 using std::vector;
 
 float Process::CalcCpuUtil(){
+  // Private function to simplify calculation of utilization
   long total_jiffies = LinuxParser::Jiffies();
   long active = LinuxParser::ActiveJiffies(pid_);
   
@@ -24,14 +25,15 @@ float Process::CalcCpuUtil(){
   previous_active_ = active;
   previous_total_ = total_jiffies;
   
-  util = (util<0) ? 0 : util;
   return util;
 }
 
 void Process::Update(){
+  // The update method is provided to update the things that change
+  // over time. As opposed to the things like cmd that can be set once.
   utilization_ = CalcCpuUtil();
-  vm_size_ = LinuxParser::Ram(pid_); //convert to MB from KB
-  up_time_ = LinuxParser::UpTime(pid_)/clock_tick_;
+  vm_size_ = LinuxParser::Ram(pid_);
+  up_time_ = LinuxParser::UpTime(pid_)/clock_tick_; // convert to seconds
 }
 
 // TODO: Return this process's ID
