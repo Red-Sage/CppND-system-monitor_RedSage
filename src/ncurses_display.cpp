@@ -43,10 +43,11 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   wprintw(window, ProgressBar(system.MemoryUtilization()).c_str());
   wattroff(window, COLOR_PAIR(1));
   mvwprintw(window, ++row, 2,
-            ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
-  mvwprintw(
-      window, ++row, 2,
-      ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
+            "Total Processes:%6i", system.TotalProcesses()); // fixes overwrite and alligns with line below
+            //("Total Processes: " + to_string(system.TotalProcesses())).c_str());
+  mvwprintw(window, ++row, 2,
+            "Running Processes:%4i", system.RunningProcesses()); // fixes overwriting problem if processes goes over 10
+      // ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
   mvwprintw(window, ++row, 2,
             ("Up Time: " + Format::ElapsedTime(system.UpTime())).c_str());
   wrefresh(window);
