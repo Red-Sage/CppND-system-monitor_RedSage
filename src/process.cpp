@@ -33,7 +33,7 @@ void Process::Update(){
   // over time. As opposed to the things like cmd that can be set once.
   utilization_ = CalcCpuUtil();
   vm_size_ = LinuxParser::Ram(pid_);
-  up_time_ = LinuxParser::UpTime(pid_)/clock_tick_; // convert to seconds
+  up_time_ = LinuxParser::UpTime() - start_time_;
 }
 
 // TODO: Return this process's ID

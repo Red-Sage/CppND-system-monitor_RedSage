@@ -361,7 +361,9 @@ long LinuxParser::UpTime(int pid) {
     for (int i = 0; i <= 21; i++){
       linestream >> start_time;
     }
+    return std::stol(start_time);
   }
 
-  return std::stol(start_time);
+  return 0;
+  
 }
